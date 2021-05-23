@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<ul class="nav justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link" href="/">Главная</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/clients">Клиенты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/drugs">Лекарства</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/receipts">Рецепты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/orders">Заказы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/tickets">Заявки</a>
+    </li>
+</ul>
+<ul class="nav justify-content-center">
+    <li class="nav-item">
+        <a th:class="'nav-link ' + ${kidals != null ? 'active' : ''}" th:href="'/clients' + ${kidals == null ? '?kidals=true' : ''}">Кидалы</a>
+    </li>
+    <li class="nav-item">
+        <a th:class="'nav-link ' + ${waiters != null ? 'active' : ''}" th:href="'/clients' + ${waiters == null ? '?waiters=true' : ''}">Ждуны</a>
+    </li>
+</ul>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th> ID</th>
+            <th> ФИО</th>
+            <th> Телефон</th>
+            <th> Адрес</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${clients.isEmpty()}">
+            <td colspan="4"> No Clients Available</td>
+        </tr>
+        <!--/*@thymesVar id="client" type="ru.keni0k.pharmacy.client.Client"*/-->
+        <tr th:each="client : ${clients}">
+            <td><span th:text="${client.id.substring(0, 5)}"> ID </span></td>
+            <td><span th:text="${client.fio}"> FIO </span></td>
+            <td><span th:text="${client.phone}"> PHONE </span></td>
+            <td><span th:text="${client.address}"> ADDRESS </span></td>
+        </tr>
+        </tbody>
+    </table>
+    <form action="/clients" method="post">
+        <div class="mb-3">
+            <label for="input-fio" class="form-label">ФИО</label>
+            <input name="fio" id="input-fio" type="text" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="input-phone" class="form-label">Номер телефона</label>
+            <input name="phone" id="input-phone" type="tel" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="input-address" class="form-label">Адрес</label>
+            <input name="address" id="input-address" type="text" class="form-control"/>
+        </div>
+        <button class="btn btn-primary" type="submit">Добавить</button>
+    </form>
+</div>
+</body>
+</html>

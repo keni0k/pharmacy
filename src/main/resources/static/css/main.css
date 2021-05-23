@@ -1,0 +1,9 @@
+.nav-item>.nav-link.active{
+    color: blue;
+}
+.center {
+    text-align: center;
+}
+.mt-40 {
+    margin-top: 150px;
+}
