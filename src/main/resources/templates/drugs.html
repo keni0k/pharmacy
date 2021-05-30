@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 <ul class="nav justify-content-center">
@@ -39,10 +40,13 @@
             <th> Количество</th>
             <th> Минимум</th>
             <th> Объем</th>
+            <th> Продано</th>
             <th> Ед. объема</th>
             <th> В продаже</th>
             <th> Производится</th>
             <th> Нужен рецепт</th>
+            <th> Изменить</th>
+            <th> Удалить</th>
         </tr>
         </thead>
         <tbody>
@@ -50,20 +54,38 @@
             <td colspan="2"> No Drugs Available</td>
         </tr>
         <!--/*@thymesVar id="drug" type="ru.keni0k.pharmacy.drug.Drug"*/-->
-            <tr th:each="drug : ${drugs}">
-                <td><span th:text="${drug.name}"> Название </span></td>
-                <td><span th:text="${drug.type.name}"> Тип </span></td>
-                <td><span th:text="${drug.price}"> Цена </span></td>
-                <td><span th:text="${drug.cnt}"> Количество </span></td>
-                <td><span th:text="${drug.minCnt}"> Минимум </span></td>
-                <td><span th:text="${drug.volume}"> Объем </span></td>
-                <td><span th:text="${drug.volumeType.name}"> Ед. объема </span></td>
-                <td><span th:text="${drug.isForSale ? '+' : '-'}"> В продаже </span></td>
-                <td><a th:if="${drug.manufactured}" th:href="${'/receipts?id=' + drug.id}">+</a><span th:unless="${drug.manufactured}">-</span></td>
-                <td><span th:text="${drug.isNeedReceipt ? '+' : '-'}"> Нужен рецепт </span></td>
-            </tr>
+        <tr th:each="drug : ${drugs}"
+            th:style="${drug.critical ? 'background: #ff0018' : (drug.warning ? 'background: #ff001880' : '')}">
+            <td><span th:text="${drug.name}"> Название </span></td>
+            <td><span th:text="${drug.type.name}"> Тип </span></td>
+            <td><span th:text="${drug.price}"> Цена </span></td>
+            <td><span th:text="${drug.cnt}"> Количество </span></td>
+            <td><span th:text="${drug.minCnt}"> Минимум </span></td>
+            <td><span th:text="${drug.volume}"> Объем </span></td>
+            <td><span th:text="${drug.sold}"> Продано </span></td>
+            <td><span th:text="${drug.volumeType.name}"> Ед. объема </span></td>
+            <td class="center"><span th:text="${drug.isForSale ? '+' : '-'}"> В продаже </span></td>
+            <td class="center"><a th:if="${drug.manufactured}" th:href="${'/receipts?id=' + drug.id}">+</a><span
+                    th:unless="${drug.manufactured}">-</span></td>
+            <td class="center"><span th:text="${drug.isNeedReceipt ? '+' : '-'}"> Нужен рецепт </span></td>
+            <td class="center"><a href="#" th:data-id="${drug.id}" onclick="edit(this.getAttribute('data-id'))"><i
+                    class="fas fa-edit"></i></a></td>
+            <td class="center"><a href="#" th:data-id="${drug.id}" onclick="remove(this.getAttribute('data-id'))"><i
+                    class="fas fa-trash-alt"></i></a></td>
+        </tr>
         </tbody>
     </table>
 </div>
+<script>
+    const TEMPLATE = '/drugs';
+
+    function edit(id) {
+        window.open(TEMPLATE + '/edit?id=' + id, '_self');
+    }
+
+    function remove(id) {
+        window.open(TEMPLATE + '/remove?id=' + id, '_self');
+    }
+</script>
 </body>
 </html>

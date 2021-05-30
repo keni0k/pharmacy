@@ -5,6 +5,8 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.view.RedirectView
+import ru.keni0k.pharmacy.drug.DrugController
 import ru.keni0k.pharmacy.drug.DrugRepository
 import ru.keni0k.pharmacy.receipt.ReceiptController.Companion.TEMPLATE
 
@@ -24,17 +26,27 @@ class ReceiptController(
         @RequestParam(required = false) id: String?,
         modelMap: ModelMap
     ): String {
-        if (id != null) {
+        return if (id != null) {
             modelMap.addAttribute("receipt",
                 repository.findAllByParentDrugId(id)
                     .sortedBy { it.step }
             )
-            return "receipt"
+            "receipt"
         } else {
             modelMap.addAttribute("drugs",
                 drugRepository.findAllByManufacturedIsTrue()
             )
-            return "receipts"
+            "receipts"
         }
     }
+
+    @GetMapping("/remove")
+    fun remove(
+        modelMap: ModelMap,
+        @RequestParam id: Long
+    ): RedirectView {
+        repository.deleteById(id)
+        return RedirectView("/${TEMPLATE}")
+    }
+
 }

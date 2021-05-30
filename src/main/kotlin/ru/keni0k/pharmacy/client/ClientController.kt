@@ -45,4 +45,13 @@ class ClientController(val repository: ClientRepository) {
         return RedirectView("/clients")
     }
 
+    @GetMapping("/remove")
+    fun remove(
+        modelMap: ModelMap,
+        @RequestParam id: String
+    ): RedirectView {
+        repository.deleteById(id)
+        return RedirectView("/$TEMPLATE")
+    }
+
 }

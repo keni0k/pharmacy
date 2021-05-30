@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 <ul class="nav justify-content-center">
@@ -39,11 +40,12 @@
         <table class="table">
             <thead>
             <tr>
-                <th> ID</th>
                 <th> Лекарство</th>
                 <th> Количество</th>
                 <th> Цена</th>
                 <th> Тикет</th>
+                <th> Изменить</th>
+                <th> Удалить</th>
             </tr>
             </thead>
             <tbody>
@@ -51,13 +53,15 @@
                 <td colspan="5"> No Order Items Available</td>
             </tr>
             <tr th:each="item : ${items}">
-                <td><span th:text="${item.id}"> ID </span></td>
                 <td>
                     <span th:text="${item.drug.name}"> Лекарство </span></td>
                 <td><span th:text="${item.cnt}"> Количество </span></td>
                 <td><span th:text="${item.price}"> Цена </span></td>
                 <td><span th:if="${item.ticket != null}" th:text="${item.ticket.id + ': ' + item.ticket.status.name}"> Тикет </span>
                     <span th:if="${item.ticket == null}"> - </span></td>
+                <td class="center"><a href = "#" th:data-id="${item.id}" onclick="edit(this.getAttribute('data-id'))"><i class="fas fa-edit"></i></a></td>
+                <td class="center"><a href = "#" th:data-id="${item.id}" onclick="remove(this.getAttribute('data-id'))"><i class="fas fa-trash-alt"></i></a></td>
+
             </tr>
             </tbody>
         </table>
@@ -66,5 +70,14 @@
         No order available
     </th:block>
 </div>
+<script>
+    const TEMPLATE = "/items"
+    function edit(id) {
+        window.open(TEMPLATE + '/edit?id=' + id, '_self');
+    }
+    function remove(id) {
+        window.open(TEMPLATE + '/remove?id=' + id, '_self');
+    }
+</script>
 </body>
 </html>

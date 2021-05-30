@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.RedirectView
 import ru.keni0k.pharmacy.client.Client
+import ru.keni0k.pharmacy.drug.DrugController
 import ru.keni0k.pharmacy.drug.DrugRepository
 import ru.keni0k.pharmacy.ticket.TicketController.Companion.TEMPLATE
 import java.util.logging.Logger
@@ -39,16 +40,24 @@ class TicketController(
         return TEMPLATE
     }
 
+    @GetMapping("/remove")
+    fun remove(
+        modelMap: ModelMap,
+        @RequestParam id: Long
+    ): RedirectView {
+        repository.deleteById(id)
+        return RedirectView("/${TEMPLATE}")
+    }
+
     @PostMapping
     fun addTicket(modelMap: ModelMap, @ModelAttribute ticketRequest: TicketRequest): RedirectView {
-        val logger = LoggerFactory.getLogger(TicketController::class.java)
-        logger.info("${ticketRequest.drugId} : ${ticketRequest.cnt} : ${ticketRequest.manufacture}")
+        val drug = drugRepository.getOne(ticketRequest.drugId)
         repository.save(
             Ticket(
-                drugRepository.getOne(ticketRequest.drugId),
+                drug,
                 ticketRequest.cnt,
                 ticketStatusRepository.getOne(1),
-                ticketRequest.manufacture
+                drug.manufactured,
             )
         )
         return RedirectView("/tickets")
